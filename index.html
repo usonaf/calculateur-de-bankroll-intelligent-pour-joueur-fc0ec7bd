@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Bankroll Intelligent pour Joueurs Béninois | Votre Outil de Maîtrise Financière</title>
+    <meta name="description" content="Optimisez votre gestion de fonds de jeu avec un calculateur de bankroll personnalisé. Définissez vos limites, suivez vos sessions, et jouez de manière responsable pour une expérience durable.">
+    <style>
+        :root {
+            --color-primary: #0A3D62; /* Dark blue, ledger-like */
+            --color-secondary: #C8D7E1; /* Light grey-blue */
+            --color-accent: #E2B04E; /* Gold/Brass, financial accent */
+            --color-text: #333;
+            --color-background: #F0F2F5;
+            --color-border: #BBC7D2;
+            --font-family-primary: 'Arial', sans-serif;
+            --font-family-mono: 'Lucida Console', monospace;
+        }
+
+        body {
+            font-family: var(--font-family-primary);
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 5px solid var(--color-accent);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .panel {
+            background-color: white;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .panel-header {
+            font-size: 1.8em;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-secondary);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .form-group input[type="number"],
+        .form-group select {
+            width: calc(100% - 22px);
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: var(--font-family-mono);
+            background-color: #f9f9f9;
+        }
+
+        .form-group input[type="number"]:focus,
+        .form-group select:focus {
+            border-color: var(--color-accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(226, 176, 78, 0.3);
+        }
+
+        #tool-submit {
+            background-color: var(--color-accent);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #tool-submit:hover {
+            background-color: #d1a044;
+        }
+
+        .result-section {
+            background-color: var(--color-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 30px;
+            margin-top: 30px;
+            font-family: var(--font-family-mono);
+            color: var(--color-primary);
+        }
+
+        .result-section h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            font-size: 1.5em;
+            border-bottom: 1px dashed var(--color-primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dotted rgba(10, 61, 98, 0.3);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item span:first-child {
+            font-weight: bold;
+        }
+
+        .responsible-gaming {
+            background-color: #fcf8e3;
+            border-left: 5px solid #E2B04E;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+            color: #8a6d3b;
+        }
+
+        .responsible-gaming h4 {
+            margin-top: 0;
+            color: #8a6d3b;
+            font-size: 1.2em;
+        }
+
+        .responsible-gaming p {
+            margin-bottom: 0;
+            font-size: 0.9em;
+        }
+        
+        .testimonial {
+            background-color: #EBF2F7;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            font-style: italic;
+            color: #555;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .testimonial p {
+            margin: 0 0 10px 0;
+        }
+
+        .testimonial .author {
+            font-weight: bold;
+            text-align: right;
+            display: block;
+            color: var(--color-primary);
+            font-style: normal;
+        }
+
+        footer {
+            background-color: var(--color-primary);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            font-size: 0.9em;
+            border-top: 5px solid var(--color-accent);
+        }
+
+        .seo-section {
+            padding: 30px 0;
+            text-align: center;
+            color: #555;
+            font-size: 0.9em;
+            border-top: 1px solid var(--color-border);
+            margin-top: 40px;
+        }
+
+        .seo-section h2 {
+            color: var(--color-primary);
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        .seo-section p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .seo-section ul {
+            text-align: left;
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        .seo-section li {
+            margin-bottom: 5px;
+        }
+    </style>
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://calculateur-de-bankroll-intelligent-pour-joueur-fc0ec7bd.onrender.com">
+    <meta property="og:title" content="Calculateur de Bankroll Intelligent pour Joueurs Béninois">
+    <meta property="og:description" content="Optimisez votre gestion de fonds de jeu avec un calculateur de bankroll personnalisé. Définissez vos limites, suivez vos sessions, et jouez de manière responsable pour une expérience durable.">
+    <meta property="og:url" content="https://calculateur-de-bankroll-intelligent-pour-joueur-fc0ec7bd.onrender.com">
+    <meta property="og:type" content="website">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Calculateur de Bankroll Intelligent pour Joueurs Béninois", "description": "Optimisez votre gestion de fonds de jeu avec un calculateur de bankroll personnalisé. Définissez vos limites, suivez vos sessions, et jouez de manière responsable pour une expérience durable.", "url": "https://calculateur-de-bankroll-intelligent-pour-joueur-fc0ec7bd.onrender.com", "applicationCategory": "UtilityApplication", "operatingSystem": "Web Browser"}</script>
+</head>
+<body data-site-slug="calculateur-de-bankroll-intelligent-pour-joueur-fc0ec7bd" data-runtime-mode="generic_calculator">
+    <header>
+        <div class="container">
+            <h1>Calculateur de Bankroll Intelligent pour Joueurs Béninois</h1>
+            <p>Optimisez votre gestion de fonds de jeu pour une expérience durable et responsable.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="panel">
+            <h2 class="panel-header">Votre Outil de Maîtrise Financière</h2>
+            <p>Ce calculateur vous aide à établir des limites claires et à suivre vos finances de jeu. Prenez le contrôle de votre bankroll.</p>
+            
+            <form id="tool-form">
+                <div class="form-group">
+                    <label for="initialBankroll">Votre Bankroll Initial (FCFA) :</label>
+                    <input type="number" id="initialBankroll" value="50000" min="1000" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dailyLimit">Limite de Perte Journalière (%) :</label>
+                    <input type="number" id="dailyLimit" value="5" min="1" max="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="monthlyLimit">Limite de Perte Mensuelle (%) :</label>
+                    <input type="number" id="monthlyLimit" value="20" min="1" max="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="sessionDuration">Durée moyenne d'une session (heures) :</label>
+                    <input type="number" id="sessionDuration" value="1" min="0.5" step="0.5" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="avgBetSize">Taille moyenne de votre mise (FCFA) :</label>
+                    <input type="number" id="avgBetSize" value="500" min="50" required>
+                </div>
+
+                <button type="submit" id="tool-submit">Calculer ma Bankroll Optimale</button>
+            </form>
+        </section>
+
+        <section id="tool-result" class="result-section" style="display:none;">
+            <h3 id="result-headline">Vos Projections Personnalisées</h3>
+            <div class="result-item">
+                <span>Bankroll Initial :</span>
+                <span id="displayInitialBankroll"></span>
+            </div>
+            <div class="result-item">
+                <span>Limite de Perte Journalière :</span>
+                <span id="displayDailyLimit"></span>
+            </div>
+            <div class="result-item">
+                <span>Limite de Perte Mensuelle :</span>
+                <span id="displayMonthlyLimit"></span>
+            </div>
+            <div class="result-item">
+                <span>Perte Max. Journalière Tolérable :</span>
+                <span id="displayMaxDailyLoss"></span>
+            </div>
+            <div class="result-item">
+                <span>Perte Max. Mensuelle Tolérable :</span>
+                <span id="displayMaxMonthlyLoss"></span>
+            </div>
+            <div class="result-item">
+                <span>Niveau d'Alerte Bas :</span>
+                <span id="displayLowAlert"></span>
+            </div>
+            <div class="result-item">
+                <span>Niveau d'Alerte Critique :</span>
+                <span id="displayCriticalAlert"></span>
+            </div>
+            <div class="result-item">
+                <span>Nombre de Mises Estimé par Session :</span>
+                <span id="displayEstimatedBets"></span>
+            </div>
+            <div class="result-item">
+                <span>Bankroll Requise par Session (estimation) :</span>
+                <span id="displayRequiredSessionBankroll"></span>
+            </div>
+        </section>
+
+        <section class="testimonial">
+            <p>"Depuis que j'utilise cet outil, je joue avec beaucoup plus de sérénité. Fini les mauvaises surprises, je sais toujours où j'en suis. C'est un véritable allié pour ma gestion de jeu au Bénin."</p>
+            <span class="author">— Arnaud K., Cotonou</span>
+        </section>
+
+        <section class="panel">
+            <h2 class="panel-header">Pourquoi Gérer Votre Bankroll ?</h2>
+            <p>Une bonne gestion de bankroll est la pierre angulaire d'une pratique de jeu saine et durable. Au Bénin, où l'engouement pour les paris sportifs et les casinos est grandissant, il est crucial de se prémunir contre les risques.</p>
+            <ul>
+                <li><strong>Protection Financière :</strong> Évitez les pertes excessives et protégez vos économies.</li>
+                <li><strong>Jeu Responsable :</strong> Définissez des limites claires et respectez-les.</li>
+                <li><strong>Longévité :</strong> Prolongez votre plaisir de jeu en évitant de "casser" votre bankroll trop rapidement.</li>
+                <li><strong>Clarté Mentale :</strong> Réduisez le stress et jouez avec un esprit plus clair, ce qui peut même améliorer vos décisions.</li>
+            </ul>
+        </section>
+
+        <section class="responsible-gaming">
+            <h4>Le Jeu Responsable est notre Priorité</h4>
+            <p>Le jeu doit rester un divertissement. Si vous ou l'un de vos proches rencontrez des difficultés liées au jeu, n'hésitez pas à chercher de l'aide auprès des associations locales de soutien au Bénin. Fixez-vous des limites et tenez-vous-y.</p>
+            <button data-affiliate-slot="responsible-gaming-bj" style="background-color: #17A2B8; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-top: 15px; cursor: pointer;">En savoir plus sur le jeu responsable</button>
+        </section>
+    </main>
+
+    <footer class="seo-section">
+        <div class="container">
+            <h2>Gérer Votre Bankroll au Bénin : Guide Complet pour Joueurs</h2>
+            <p>Dans un pays où les paris sportifs et les jeux de casino gagnent en popularité, savoir comment gérer sa bankroll est indispensable. Que vous soyez un parieur débutant ou expérimenté à Cotonou, Porto-Novo ou Parakou, notre calculateur de bankroll est conçu spécifiquement pour les réalités des joueurs béninois. Évitez les pièges courants du jeu excessif grâce à une planification financière rigoureuse.</p>
+            <p>Recherchez-vous des outils pour mieux contrôler vos dépenses de jeu ? Notre plateforme offre une solution simple et efficace pour :</p>
+            <ul>
+                <li>Calculer votre bankroll idéale pour les paris sportifs ou les jeux de casino.</li>
+                <li>Définir des limites de perte journalières et mensuelles en FCFA.</li>
+                <li>Obtenir des alertes de dépassement pour rester dans votre budget.</li>
+                <li>Planifier vos sessions de jeu de manière responsable.</li>
+            </ul>
+            <p>Ne laissez plus le hasard dicter vos finances. Utilisez notre <strong>calculateur de bankroll Bénin</strong> pour optimiser votre expérience de jeu et assurer votre tranquillité d'esprit. C'est l'outil essentiel pour tout joueur sérieux au Bénin souhaitant adopter une approche de jeu contrôlée et durable. <em>Gestion de bankroll Bénin</em>, <em>calculateur paris sportifs Bénin</em>, <em>limites de jeu casino Bénin</em> – nous sommes là pour vous aider à jouer malin.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('tool-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const initialBankroll = parseFloat(document.getElementById('initialBankroll').value);
+            const dailyLimit = parseFloat(document.getElementById('dailyLimit').value);
+            const monthlyLimit = parseFloat(document.getElementById('monthlyLimit').value);
+            const sessionDuration = parseFloat(document.getElementById('sessionDuration').value);
+            const avgBetSize = parseFloat(document.getElementById('avgBetSize').value);
+
+            if (isNaN(initialBankroll) || isNaN(dailyLimit) || isNaN(monthlyLimit) || isNaN(sessionDuration) || isNaN(avgBetSize)) {
+                alert('Veuillez remplir tous les champs avec des nombres valides.');
+                return;
+            }
+
+            const maxDailyLoss = (initialBankroll * dailyLimit / 100).toFixed(2);
+            const maxMonthlyLoss = (initialBankroll * monthlyLimit / 100).toFixed(2);
+
+            // Assuming roughly 60 bets per hour (fast play, e.g., slots/quick decisions)
+            // This is a heuristic and can be refined or made configurable
+            const estimatedBetsPerSession = Math.round(sessionDuration * 60); 
+            const requiredSessionBankroll = (estimatedBetsPerSession * avgBetSize * 1.5).toFixed(2); // Factor of 1.5 for variance
+
+            const lowAlert = (initialBankroll * 0.75).toFixed(2); // 75% of initial bankroll remaining
+            const criticalAlert = (initialBankroll * 0.50).toFixed(2); // 50% of initial bankroll remaining
+
+            document.getElementById('displayInitialBankroll').textContent = `${initialBankroll.toLocaleString('fr-BJ')} FCFA`;
+            document.getElementById('displayDailyLimit').textContent = `${dailyLimit}%`;
+            document.getElementById('displayMonthlyLimit').textContent = `${monthlyLimit}%`;
+            document.getElementById('displayMaxDailyLoss').textContent = `${maxDailyLoss.toLocaleString('fr-BJ')} FCFA`;
+            document.getElementById('displayMaxMonthlyLoss').textContent = `${maxMonthlyLoss.toLocaleString('fr-BJ')} FCFA`;
+            document.getElementById('displayLowAlert').textContent = `${lowAlert.toLocaleString('fr-BJ')} FCFA`;
+            document.getElementById('displayCriticalAlert').textContent = `${criticalAlert.toLocaleString('fr-BJ')} FCFA`;
+            document.getElementById('displayEstimatedBets').textContent = `${estimatedBetsPerSession} mises`;
+            document.getElementById('displayRequiredSessionBankroll').textContent = `${requiredSessionBankroll.toLocaleString('fr-BJ')} FCFA`;
+
+            document.getElementById('tool-result').style.display = 'block';
+        });
+    </script>
+<div id="qa-smoke-result" hidden></div>
+<script id="farmbuilder-affiliate-helper">
+(function () {
+  window.__UTILITY_AFFILIATE_MAP = window.__UTILITY_AFFILIATE_MAP || {};
+  document.addEventListener("click", function (event) {
+    const target = event.target.closest("[data-affiliate-slot]");
+    if (!target) return;
+    const slot = target.getAttribute("data-affiliate-slot");
+    const href = window.__UTILITY_AFFILIATE_MAP[slot];
+    if (!href) return;
+    if (target.tagName && target.tagName.toLowerCase() === "a") {
+      target.setAttribute("href", href);
+      target.removeAttribute("rel");
+      return;
+    }
+    event.preventDefault();
+    window.open(href, "_blank");
+  }, true);
+})();
+</script>
+<script id="farmbuilder-functional-qa">
+(function () {
+  function marker() {
+    let node = document.getElementById("qa-smoke-result");
+    if (node) return node;
+    node = document.createElement("div");
+    node.id = "qa-smoke-result";
+    node.hidden = true;
+    document.body.appendChild(node);
+    return node;
+  }
+
+  let qaFinished = false;
+  let qaWatchdog = null;
+
+  function normalize(text) {
+    return String(text || "").replace(/\s+/g, " ").trim();
+  }
+
+  function findForm() {
+    return document.getElementById("tool-form") || document.querySelector("form");
+  }
+
+  function findResult() {
+    return (
+      document.getElementById("tool-result") ||
+      document.querySelector("[data-result]") ||
+      document.querySelector(".tool-result, .result-card, .result, .results, .output, .preview, .diagnostic, .analysis")
+    );
+  }
+
+  function primaryAction(form) {
+    if (!form) return null;
+    return (
+      document.getElementById("tool-submit") ||
+      form.querySelector("#tool-submit") ||
+      form.querySelector("[data-primary-action]") ||
+      form.querySelector("button[type=submit]") ||
+      form.querySelector("button") ||
+      form.querySelector("input[type=submit]")
+    );
+  }
+
+  function resultSignature(node) {
+    if (!node) return "";
+    const text = normalize(node.textContent);
+    const html = normalize(node.innerHTML).slice(0, 600);
+    return `${text}||${html}`;
+  }
+
+  function resultHeadline(node) {
+    if (!node) return "";
+    const heading = node.querySelector("h1, h2, h3, strong, b");
+    return normalize(heading ? heading.textContent : "");
+  }
+
+  function sampleText(field) {
+    const key = `${field.id || ""} ${field.name || ""} ${field.placeholder || ""}`.toLowerCase();
+    if (/email/.test(key)) return "bonjour@example.com";
+    if (/url|site|website|lien/.test(key)) return "https://example.com/offre-solaire";
+    if (/phone|tel|mobile/.test(key)) return "0612345678";
+    if (/ville|city|localisation|location|region|departement|postal/.test(key)) return "Paris";
+    if (/orientation/.test(key)) return "sud";
+    if (/keyword|theme|topic|sujet|subject/.test(key)) return "energie solaire domestique";
+    if (/titre|title/.test(key)) return "Simulateur solaire maison";
+    if (/nom|name|project/.test(key)) return "Projet Horizon";
+    if (/description|notes|content|message/.test(key)) return "Maison individuelle exposee sud avec toiture exploitable.";
+    return field.placeholder || "France";
+  }
+
+  function sampleNumber(field) {
+    const key = `${field.id || ""} ${field.name || ""}`.toLowerCase();
+    if (/inclinaison|angle|slope/.test(key)) return "30";
+    if (/surface|size|m2|sqm/.test(key)) return "28";
+    if (/annee|year/.test(key)) return "2024";
+    if (/prix|price|budget|cost|amount|montant/.test(key)) return "12000";
+    const min = Number(field.min || "");
+    const max = Number(field.max || "");
+    if (Number.isFinite(min) && Number.isFinite(max) && max >= min) {
+      return String(Math.min(max, Math.max(min, min + Math.round((max - min) * 0.35))));
+    }
+    if (Number.isFinite(min)) return String(Math.max(min, 12));
+    if (Number.isFinite(max)) return String(Math.min(max, 12));
+    return field.value || "12";
+  }
+
+  function applySample(field) {
+    const tag = (field.tagName || "").toLowerCase();
+    const type = (field.type || "").toLowerCase();
+    if (field.disabled) return;
+    if (type === "hidden" || type === "submit" || type === "button" || type === "reset" || type === "image" || type === "file") {
+      return;
+    }
+    const currentValue = normalize(field.value);
+    if (tag === "select") {
+      if (currentValue) return;
+      const option = Array.from(field.options || []).find((item) => item.value && !item.disabled) || field.options[0];
+      if (option) field.value = option.value;
+      return;
+    }
+    if (type === "checkbox") {
+      if (field.checked) return;
+      field.checked = true;
+      return;
+    }
+    if (type === "radio") {
+      if (field.checked) return;
+      field.checked = true;
+      return;
+    }
+    if (type === "date") {
+      if (currentValue) return;
+      field.value = "2026-03-01";
+      return;
+    }
+    if (type === "email") {
+      if (currentValue) return;
+      field.value = "bonjour@example.com";
+      return;
+    }
+    if (type === "url") {
+      if (currentValue) return;
+      field.value = "https://example.com/offre-solaire";
+      return;
+    }
+    if (type === "tel") {
+      if (currentValue) return;
+      field.value = "0612345678";
+      return;
+    }
+    if (type === "color") {
+      if (currentValue) return;
+      field.value = "#2f855a";
+      return;
+    }
+    if (type === "number" || type === "range") {
+      if (currentValue) return;
+      field.value = sampleNumber(field);
+      return;
+    }
+    if (currentValue) return;
+    field.value = sampleText(field);
+  }
+
+  function stamp(status, detail, headline, primary) {
+    if (qaFinished) return;
+    qaFinished = true;
+    if (qaWatchdog) {
+      window.clearTimeout(qaWatchdog);
+      qaWatchdog = null;
+    }
+    const node = marker();
+    node.dataset.status = status;
+    node.dataset.mode = "native-form";
+    node.dataset.detail = detail || "";
+    node.dataset.headline = headline || "";
+    node.dataset.primary = primary || "";
+    node.dataset.viewport = window.innerWidth <= 640 ? "mobile" : "desktop";
+    window.setTimeout(function () {
+      try {
+        window.stop();
+      } catch (_error) {}
+    }, 0);
+  }
+
+  function installModalGuards() {
+    const noop = function () {};
+    const approve = function () { return true; };
+    const empty = function () { return ""; };
+    try { window.alert = noop; } catch (_error) {}
+    try { window.confirm = approve; } catch (_error) {}
+    try { window.prompt = empty; } catch (_error) {}
+  }
+
+  function triggerAction(form, action) {
+    try {
+      if (typeof form.requestSubmit === "function") {
+        form.requestSubmit(action || undefined);
+        return;
+      }
+    } catch (_error) {}
+    if (action && typeof action.click === "function") {
+      action.click();
+      return;
+    }
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  }
+
+  function inspectResult(before, attemptsLeft) {
+    const result = findResult();
+    if (!result) {
+      stamp("fail", "La zone de resultat est introuvable.", "");
+      return;
+    }
+    const after = resultSignature(result);
+    const text = normalize(result.textContent);
+    if (after && after !== before && text.length >= 24) {
+      const primary = result.querySelector("a[href], button[data-href], [data-primary-url]") || document.querySelector("#tool-result a[href]");
+      stamp("pass", "Le formulaire natif a mis a jour la zone de resultat.", resultHeadline(result), primary ? (primary.getAttribute("href") || primary.getAttribute("data-primary-url") || "") : "");
+      return;
+    }
+    if (attemptsLeft > 0) {
+      window.setTimeout(function () {
+        inspectResult(before, attemptsLeft - 1);
+      }, 250);
+      return;
+    }
+    stamp("fail", "La zone de resultat n'a pas renvoye de contenu exploitable.", resultHeadline(result));
+  }
+
+  function runSmoke() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("__qa") !== "functional") return;
+    qaWatchdog = window.setTimeout(function () {
+      stamp("fail", "QA smoke timed out before the page reported a usable result.", "");
+    }, 7000);
+    const form = findForm();
+    if (!form) {
+      stamp("fail", "Le formulaire principal est introuvable.", "");
+      return;
+    }
+    const result = findResult();
+    const before = resultSignature(result);
+    installModalGuards();
+    try {
+      form.querySelectorAll("input, select, textarea").forEach(applySample);
+    } catch (error) {
+      stamp("fail", error && error.message ? `QA smoke sample failed: ${error.message}` : "QA smoke sample failed before submit.", "");
+      return;
+    }
+    const action = primaryAction(form);
+    try {
+      triggerAction(form, action);
+    } catch (error) {
+      stamp("fail", error && error.message ? `QA smoke submit failed: ${error.message}` : "QA smoke submit failed.", "");
+      return;
+    }
+    inspectResult(before, 10);
+  }
+
+  window.addEventListener("error", function (event) {
+    const message = event && event.message ? event.message : "JavaScript runtime error during QA smoke.";
+    stamp("fail", `QA smoke JS error: ${message}`, "");
+  }, { once: true });
+
+  window.addEventListener("unhandledrejection", function (event) {
+    const reason = event && event.reason;
+    const detail = typeof reason === "string"
+      ? reason
+      : reason && reason.message
+        ? reason.message
+        : "Unhandled promise rejection during QA smoke.";
+    stamp("fail", `QA smoke rejection: ${detail}`, "");
+  }, { once: true });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      window.setTimeout(runSmoke, 60);
+    }, { once: true });
+  } else {
+    window.setTimeout(runSmoke, 60);
+  }
+})();
+</script>
+</body>
+</html>
